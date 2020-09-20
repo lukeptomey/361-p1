@@ -51,7 +51,7 @@ public class DFAState extends State {
     /**
      * Setter for whether state is start state
      */
-    public void setStateState() {
+    public void setStartState() {
         isStartState = true;
     }
 
@@ -59,7 +59,7 @@ public class DFAState extends State {
      * Gets whether state is start state
      * @return true if start state and false if not
      */
-    public boolean getStateState() {
+    public boolean getStartState() {
         return isStartState;
     }
 
