@@ -146,7 +146,7 @@ public class DFA implements DFAInterface {
         complementDFA.createCompClone(Q, origTrans);
 
         // ***** DEBUG *****
-        //System.out.println(complementDFA.toString());
+        System.out.println(complementDFA.toString());
 
 
         return complementDFA;
@@ -172,8 +172,12 @@ public class DFA implements DFAInterface {
 
         for(int i = 0; i < s.length(); i++){
             char c = s.charAt(i);
-            if(c == 'e' && current.getEndState()) {
-                // ##############################
+
+            //empty string exception
+           // System.out.println(current.getEndState()+ " " +current.getName());
+            if(Character.valueOf(c).equals('e') && current.getEndState()) {
+               
+            return true;
             }
             current = (DFAState)getToState(current, c);
             if(current == null){
@@ -335,12 +339,11 @@ public class DFA implements DFAInterface {
         Iterator<DFAState> it = cFinalStates.iterator();
         while(it.hasNext()) {
             DFAState current = it.next();
-            current.setStartState(true);
-            current.setEndState(false);
+       
+            current.setEndState(!(current.getEndState()));
         }
 
-        cStartState.setStartState(false);
-        cStartState.setEndState(true);
+         cStartState.setEndState(!(cStartState.getEndState()));
     }
 
 
