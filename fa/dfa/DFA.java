@@ -24,6 +24,7 @@ public class DFA implements DFAInterface {
     private LinkedHashSet<DFAState> Q;
     private HashSet<Character> alphabet;
     private LinkedHashSet<String> origTrans;
+    //private DFAState currentState;
 
 
     /**
@@ -33,6 +34,7 @@ public class DFA implements DFAInterface {
         Q = new LinkedHashSet<DFAState>();
         alphabet = new HashSet<Character>();
         origTrans = new LinkedHashSet<String>();
+        //currentState = new DFAState();
     }
 
 
@@ -48,6 +50,7 @@ public class DFA implements DFAInterface {
                 state = it.next();
                 if(state.getName().equals(name)) {
                     state.setStartState(true);
+                    //currentState = state;
                 }
             }
         }
@@ -143,7 +146,7 @@ public class DFA implements DFAInterface {
         complementDFA.createCompClone(Q, origTrans);
 
         // ***** DEBUG *****
-        System.out.println(complementDFA.toString());
+        //System.out.println(complementDFA.toString());
 
 
         return complementDFA;
@@ -152,29 +155,58 @@ public class DFA implements DFAInterface {
     @Override
     public boolean accepts(String s) {
 
-       //find the start state in q
+        //find the start state in q
 
-      Iterator<DFAState> it = new Iterator<DFAState>;
+        State start = getStartState();
+        DFAState current = new DFAState("");
 
-      DFAState start = getStartState();
-      LinkedList<Map.Entry<Character,String>> transitions =start.getTransitionStates();
+        Iterator<DFAState> it = Q.iterator();
+        while(it.hasNext()) {
+            current = it.next();
+            if(current.getName().equals(start.getName())){
+                break;
+            }
+        }
 
-      Iterator<String> stringIt = s.iterator();
-    
-      for(int i = 0; i < s.length(); i++){
-          
-      }
+        //compare with transition map entries
 
+        for(int i = 0; i < s.length(); i++){
+            char c = s.charAt(i);
+            if(c == 'e' && current.getEndState()) {
+                // ##############################
+            }
+            current = (DFAState)getToState(current, c);
+            if(current == null){
+                return false;
+            }
+        }
 
-       }
-       
-       //compare with transition map entries
+        if(current.getEndState()) {
+            return true;
+        }
+
+        return false;
 
 
     }
 
     @Override
     public State getToState(DFAState from, char onSymb) {
+
+        LinkedList<Map.Entry<Character,String>> transitions = from.getTransitionStates();
+
+        for(Map.Entry<Character,String> transition : transitions){
+            if(transition.getKey().equals((Character)onSymb)) {
+                Iterator<DFAState> it = Q.iterator();
+                while(it.hasNext()) {
+                    DFAState current = it.next();
+                    if(current.getName().equals(transition.getValue())) {
+                        return current;
+                    }
+                }
+            }
+        }
+        
         return null;
     }
 
