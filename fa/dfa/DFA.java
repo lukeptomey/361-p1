@@ -83,7 +83,7 @@ public class DFA implements DFAInterface {
 
     @Override
     public Set<? extends State> getStates() {
-        LinkedHashSet states = new LinkedHashSet();
+        LinkedHashSet<DFAState> states = new LinkedHashSet<DFAState>();
 
         Iterator<DFAState> it = Q.iterator();
 
@@ -96,7 +96,7 @@ public class DFA implements DFAInterface {
 
     @Override
     public Set<? extends State> getFinalStates() {
-        LinkedHashSet finalStates = new LinkedHashSet();
+        LinkedHashSet<DFAState> finalStates = new LinkedHashSet<DFAState>();
 
         Iterator<DFAState> it = Q.iterator();
 
