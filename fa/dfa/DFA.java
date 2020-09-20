@@ -96,6 +96,8 @@ public class DFA implements DFAInterface {
             DFAState insert =it.next();
             states.add(insert);
         }
+        return states;
+    }
 
     @Override
     public Set<? extends State> getFinalStates() {
@@ -140,6 +142,7 @@ public class DFA implements DFAInterface {
         DFA complementDFA = new DFA();
         complementDFA.createCompClone(Q, origTrans);
 
+        // ***** DEBUG *****
         System.out.println(complementDFA.toString());
 
 
