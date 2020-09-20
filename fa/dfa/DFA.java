@@ -83,28 +83,28 @@ public class DFA implements DFAInterface {
 
     @Override
     public Set<? extends State> getStates() {
-        Set states = new Set;
+        LinkedHashSet states = new LinkedHashSet();
 
         Iterator<DFAState> it = Q.iterator();
 
         while(it.hasNext()){
-            DFASTATE insert =it.next();
-            states.insert(insert);
+            DFAState insert =it.next();
+            states.add(insert);
         }
         return states;
     }
 
     @Override
     public Set<? extends State> getFinalStates() {
-        Set finalStates = new Set
+        LinkedHashSet finalStates = new LinkedHashSet();
 
         Iterator<DFAState> it = Q.iterator();
 
         while(it.hasNext()){
             DFAState temp = it.next();
 
-            if(temp.getEndState == true){
-                finalStates.insert(temp)
+            if(temp.getEndState() == true){
+                finalStates.add(temp);
             }
         }
         return finalStates;
@@ -119,11 +119,12 @@ public class DFA implements DFAInterface {
         while(it.hasNext()){
             DFAState temp = it.next();
 
-            if(temp.getStartState == true){
+            if(temp.getStartState() == true){
+               startState=temp;
                return startState;
             }
         }
-        
+        return null;
     }
 
     @Override
