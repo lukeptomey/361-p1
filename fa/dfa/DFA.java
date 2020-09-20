@@ -88,8 +88,15 @@ public class DFA implements DFAInterface {
 
     @Override
     public Set<? extends State> getStates() {
-        // TODO Auto-generated method stub
-        return null;
+        Set states = new Set;
+
+        Iterator<DFAState> it = Q.iterator();
+
+        while(it.hasNext()){
+            DFASTATE insert =it.next();
+            states.insert(temp);
+        }
+        return states;
     }
 
     @Override
