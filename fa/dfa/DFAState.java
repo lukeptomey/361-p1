@@ -12,6 +12,7 @@ public class DFAState extends State {
     public DFAState(String name) {
         this.name = name;
         statesItCanGoTo = new HashSet<String>();
+        isEndState = isStartState = false;
     }
 
     public boolean checkIfCanGoTo(State toState){
@@ -27,11 +28,11 @@ public class DFAState extends State {
         return statesItCanGoTo.toString();
     }
 
-    public void setStateState() {
+    public void setStartState() {
         isStartState = true;
     }
 
-    public boolean getStateState() {
+    public boolean getStartState() {
         return isStartState;
     }
 

@@ -1,5 +1,6 @@
 package fa.dfa;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -10,19 +11,27 @@ public class DFA implements DFAInterface {
 
     private LinkedHashSet<DFAState> Q;
     // private Map T;
+    private HashSet<Character> alphabet;
 
     public DFA() {
         Q = new LinkedHashSet<DFAState>();
         // T = new LinkedHashMap<>();
+        alphabet = new HashSet<Character>();
     }
 
 
     @Override
     public void addStartState(String name) {
         DFAState state = new DFAState(name);
-        state.setStateState();
+        state.setStartState();
         if(!(Q.add(state))){
-            // Iterate
+            Iterator<DFAState> it = Q.iterator();
+            while(it.hasNext()) {
+                state = it.next();
+                if(state.getName().equals(name)) {
+                    state.setStartState();
+                }
+            }
         }
     }
 
@@ -42,19 +51,21 @@ public class DFA implements DFAInterface {
 
     @Override
     public void addTransition(String fromState, char onSymb, String toState) {
-       // Find fromState in Q.
-       // Add method in Q to add transition onSymb and toState.
+        // Find fromState in Q.
+        // Add method in Q to add transition onSymb and toState.
 
-       Iterator<DFAState> it = Q.iterator();
+        alphabet.add(onSymb);
 
-       while(it.hasNext()){
+        Iterator<DFAState> it = Q.iterator();
+
+        while(it.hasNext()){
            DFAState temp = it.next();
            //System.out.println(temp.getName()+ " " + fromState);
-           if(temp.getName().equals(fromState)){
-               //System.out.println("Adding " + toState);
+            if(temp.getName().equals(fromState)){
+                //System.out.println("Adding " + toState);
                 temp.addToCanGoToList(toState, onSymb);
                 break;
-           }
+            }
        }
 
 
@@ -81,8 +92,7 @@ public class DFA implements DFAInterface {
 
     @Override
     public Set<Character> getABC() {
-        // TODO Auto-generated method stub
-        return null;
+        return alphabet;
     }
 
     @Override
@@ -105,15 +115,64 @@ public class DFA implements DFAInterface {
 
     @Override
     public String toString() {
-    /*  // DEBUG: Prints HashSet transitions from States
+        /*
+            // DEBUG: Prints HashSet transitions from States
         Iterator<DFAState> it = Q.iterator();
-       while(it.hasNext()){
+        while(it.hasNext()){
             DFAState temp = it.next();
             System.out.println(temp.getName() + " -> " + temp.toString());
-       }
-       System.out.println("Done");
-       */
-        return Q.toString();
+        }
+        System.out.println("Done");
+        */
+
+        StringBuilder qOutput = new StringBuilder();        // All states
+        StringBuilder q0Output = new StringBuilder();       // Start States
+        StringBuilder sigmaOutput = new StringBuilder();    // Language
+        StringBuilder fOutput = new StringBuilder();        // Final States
+        StringBuilder deltaOutput = new StringBuilder();    // Transitions
+
+        // Setup
+        qOutput.append("Q = { ");
+        fOutput.append("F = { ");
+        q0Output.append("q0 = { ");
+        sigmaOutput.append("Sigma = { ");
+
+        // Loop through Q getting relevant info about each node
+        Iterator<DFAState> it = Q.iterator();
+        while(it.hasNext()){
+            DFAState current = it.next();
+            qOutput.append(current.getName() + " ");
+
+            if(current.getEndState()) {
+                fOutput.append(current.getName() + " ");
+            }
+
+            if(current.getStartState()) {
+                q0Output.append(current.getName() + " ");
+            }
+        }
+
+        // Loop though alphabet getting characters
+        Iterator<Character> abcIt = alphabet.iterator();
+        while(abcIt.hasNext()) {
+            Character chr = abcIt.next();
+            sigmaOutput.append(chr.toString() + " ");
+        }
+
+        // Formatting
+        qOutput.append("}\n");
+        fOutput.append("}\n");
+        q0Output.append("}\n");
+        sigmaOutput.append("}\n");
+
+        // Builds final output string
+        StringBuilder finalOutput = new StringBuilder();
+        finalOutput.append(qOutput);
+        finalOutput.append(sigmaOutput);
+        finalOutput.append(q0Output);
+        finalOutput.append(fOutput);
+
+        return finalOutput.toString();
     }
 
 
