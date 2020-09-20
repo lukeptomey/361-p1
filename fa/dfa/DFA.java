@@ -7,12 +7,26 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import fa.State;
 
+/**
+ * Deterministic finite automata object. Includes add and get methods for states and 
+ * transitions. Additionally, it can create the complement of a given DFA and checks
+ * if a given string is accepted.
+ * @author Luke Ptomey
+ * @author Kyle Epperson
+ */
+
+
+
 public class DFA implements DFAInterface {
 
     private LinkedHashSet<DFAState> Q;
     // private Map T;
     private HashSet<Character> alphabet;
 
+
+    /**
+     * DFA constructor
+     */
     public DFA() {
         Q = new LinkedHashSet<DFAState>();
         // T = new LinkedHashMap<>();
