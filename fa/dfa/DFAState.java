@@ -9,7 +9,7 @@ import fa.State;
 
 /**
  * Deterministic finite automata object. Includes getters and seters for start and end state
- * charactistics. Has set of possible transitions from the state.
+ * charactistics. Has map of possible transitions from the state.
  * @author Luke Ptomey
  * @author Kyle Epperson
  */
@@ -31,7 +31,7 @@ public class DFAState extends State {
 
     /**
      * Check whether state can transition to given state
-     * @param toState is destination state
+     * @param keySymbol is transition symbol
      * @return true or false based on whether state can transition to given state
      */
     public boolean checkIfValidTransition(Character keySymbol){
@@ -42,7 +42,7 @@ public class DFAState extends State {
      * Appends to list of possible states this state can transition to.
      *  (Includes symbol needed to reach destination state)
      * @param toState is destination state
-     * @param symbol is symbol needed to reach destination state
+     * @param onSymb is symbol needed to reach destination state
      */
     public void addTransitionToState(String toState, char onSymb) {
         transitionStates.put(Character.valueOf(onSymb), toState);
