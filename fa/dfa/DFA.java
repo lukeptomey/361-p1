@@ -112,8 +112,18 @@ public class DFA implements DFAInterface {
 
     @Override
     public State getStartState() {
-        // TODO Auto-generated method stub
-        return null;
+
+        DFAState startState;
+        Iterator<DFAState> it = Q.iterator();
+
+        while(it.hasNext()){
+            DFAState temp = it.next();
+
+            if(temp.getStartState == true){
+               return startState;
+            }
+        }
+        
     }
 
     @Override
