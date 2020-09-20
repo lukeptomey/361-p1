@@ -333,17 +333,16 @@ public class DFA implements DFAInterface {
             addTransition(((Character)current.charAt(0)).toString(), current.charAt(1), ((Character)current.charAt(2)).toString());
         }
 
-        // Swap start and final states of complement
-        Set cFinalStates = getFinalStates();
-        DFAState cStartState = (DFAState)getStartState();
-        Iterator<DFAState> it = cFinalStates.iterator();
+        // Swap final states of complement
+        Set cStates = getStates();
+        Iterator<DFAState> it = cStates.iterator();
         while(it.hasNext()) {
             DFAState current = it.next();
        
             current.setEndState(!(current.getEndState()));
         }
 
-         cStartState.setEndState(!(cStartState.getEndState()));
+         
     }
 
 
