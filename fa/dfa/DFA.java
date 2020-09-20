@@ -17,6 +17,7 @@ import fa.State;
  * @author Kyle Epperson
  */
 
+@SuppressWarnings("unchecked")
 
 public class DFA implements DFAInterface {
 

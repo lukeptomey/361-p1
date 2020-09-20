@@ -13,7 +13,7 @@ import fa.State;
  * @author Luke Ptomey
  * @author Kyle Epperson
  */
-
+@SuppressWarnings("unchecked")
 public class DFAState extends State {
     
     private HashMap<Character, String> transitionStates;
