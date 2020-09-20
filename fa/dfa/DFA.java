@@ -1,9 +1,11 @@
 package fa.dfa;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Iterator;
 import java.util.Set;
 import fa.State;
 
@@ -20,7 +22,6 @@ import fa.State;
 public class DFA implements DFAInterface {
 
     private LinkedHashSet<DFAState> Q;
-    // private Map T;
     private HashSet<Character> alphabet;
 
 
@@ -29,7 +30,6 @@ public class DFA implements DFAInterface {
      */
     public DFA() {
         Q = new LinkedHashSet<DFAState>();
-        // T = new LinkedHashMap<>();
         alphabet = new HashSet<Character>();
     }
 
@@ -65,24 +65,19 @@ public class DFA implements DFAInterface {
 
     @Override
     public void addTransition(String fromState, char onSymb, String toState) {
-        // Find fromState in Q.
-        // Add method in Q to add transition onSymb and toState.
 
+        // Add to alphabet if new symbol.
         alphabet.add(onSymb);
 
         Iterator<DFAState> it = Q.iterator();
 
         while(it.hasNext()){
            DFAState temp = it.next();
-           //System.out.println(temp.getName()+ " " + fromState);
             if(temp.getName().equals(fromState)){
-                //System.out.println("Adding " + toState);
-                temp.addToCanGoToList(toState, onSymb);
+                temp.addTransitionToState(toState, onSymb);
                 break;
             }
        }
-
-
 
     }
 
@@ -136,33 +131,46 @@ public class DFA implements DFAInterface {
 
     @Override
     public String toString() {
-        /*
-            // DEBUG: Prints HashSet transitions from States
-        Iterator<DFAState> it = Q.iterator();
-        while(it.hasNext()){
-            DFAState temp = it.next();
-            System.out.println(temp.getName() + " -> " + temp.toString());
-        }
-        System.out.println("Done");
-        */
 
         StringBuilder qOutput = new StringBuilder();        // All states
         StringBuilder q0Output = new StringBuilder();       // Start States
         StringBuilder sigmaOutput = new StringBuilder();    // Language
         StringBuilder fOutput = new StringBuilder();        // Final States
         StringBuilder deltaOutput = new StringBuilder();    // Transitions
+        ArrayList<ArrayList<String>> a = new ArrayList<ArrayList<String>>();
+        int row = 0;
+        int col = 1;
+        int count = 1;
 
         // Setup
         qOutput.append("Q = { ");
         fOutput.append("F = { ");
-        q0Output.append("q0 = { ");
+        q0Output.append("q0 = ");
         sigmaOutput.append("Sigma = { ");
+        deltaOutput.append("delta = \n\t\t");
+
+        // Loop though alphabet getting characters
+        Iterator<Character> abcIt = alphabet.iterator();
+        a.add(new ArrayList<String>());
+        a.get(row).add("");   // Empty space
+        while(abcIt.hasNext()) {
+            Character chr = abcIt.next();
+            sigmaOutput.append(chr.toString() + " ");
+            deltaOutput.append(chr.toString() + "\t");
+            a.get(row).add(chr.toString());
+            count+=1;
+        }
+        row += 1;
 
         // Loop through Q getting relevant info about each node
         Iterator<DFAState> it = Q.iterator();
         while(it.hasNext()){
+            
             DFAState current = it.next();
             qOutput.append(current.getName() + " ");
+
+            a.add(new ArrayList<String>(count));
+            a.get(row).add(current.getName());
 
             if(current.getEndState()) {
                 fOutput.append(current.getName() + " ");
@@ -171,27 +179,45 @@ public class DFA implements DFAInterface {
             if(current.getStartState()) {
                 q0Output.append(current.getName() + " ");
             }
+            
+            // Creates 2D delta array
+            LinkedList<Map.Entry<Character, String>> transitions = current.getTransitionStates();
+           // System.out.println(transitions);
+            for (Map.Entry<Character, String> transition : transitions) {
+                while(!(a.get(0).get(col).equals(transition.getKey().toString()))) {
+                    col +=1;
+                }
+                a.get(row).add(col, (String)transition.getValue());
+                col = 1;
+            }
+            row += 1;
         }
 
-        // Loop though alphabet getting characters
-        Iterator<Character> abcIt = alphabet.iterator();
-        while(abcIt.hasNext()) {
-            Character chr = abcIt.next();
-            sigmaOutput.append(chr.toString() + " ");
+        // Creates delta output with 2D array
+        System.out.println(a);
+        for(int i = 1; i < row; i++) {
+            deltaOutput.append("\n\t");
+            for(int m = 0; m < count; m++) {
+                deltaOutput.append(a.get(i).get(m) + "\t");
+            }
         }
+        
 
         // Formatting
         qOutput.append("}\n");
         fOutput.append("}\n");
-        q0Output.append("}\n");
+        q0Output.append("\n");
         sigmaOutput.append("}\n");
+        deltaOutput.append("\n");
 
-        // Builds final output string
+        // Combines for final output string
         StringBuilder finalOutput = new StringBuilder();
         finalOutput.append(qOutput);
         finalOutput.append(sigmaOutput);
+        finalOutput.append(deltaOutput);
         finalOutput.append(q0Output);
         finalOutput.append(fOutput);
+
 
         return finalOutput.toString();
     }
