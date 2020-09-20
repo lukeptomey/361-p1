@@ -1,6 +1,9 @@
 package fa.dfa;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
 
 import fa.State;
 
@@ -13,7 +16,7 @@ import fa.State;
 
 public class DFAState extends State {
     
-    private HashSet<String> statesItCanGoTo;
+    private HashMap<Character, String> transitionStates;
     private boolean isEndState, isStartState;
     
     /**
@@ -22,7 +25,7 @@ public class DFAState extends State {
      */
     public DFAState(String name) {
         this.name = name;
-        statesItCanGoTo = new HashSet<String>();
+        transitionStates = new HashMap<Character, String>();
         isEndState = isStartState = false;
     }
 
@@ -31,10 +34,8 @@ public class DFAState extends State {
      * @param toState is destination state
      * @return true or false based on whether state can transition to given state
      */
-    public boolean checkIfCanGoTo(State toState){
-        return statesItCanGoTo.contains(toState);
-
-        //more implementation??
+    public boolean checkIfValidTransition(Character keySymbol){
+        return transitionStates.containsKey((Character)keySymbol);
     }
 
     /**
@@ -43,9 +44,8 @@ public class DFAState extends State {
      * @param toState is destination state
      * @param symbol is symbol needed to reach destination state
      */
-    public void addToCanGoToList(String toState, char symbol) {
-        String stateAndSymbol = toState + " " + symbol;
-        statesItCanGoTo.add(stateAndSymbol);
+    public void addTransitionToState(String toState, char onSymb) {
+        transitionStates.put(Character.valueOf(onSymb), toState);
     }
 
     /**
@@ -76,6 +76,19 @@ public class DFAState extends State {
      */
     public boolean getEndState() {
         return isEndState;
+    }
+
+    /**
+     * Gets LinkedList of transition states that this node can go to.
+     * @return LinkedList of Map Entries of node transitions.
+     */
+    public LinkedList<Map.Entry<Character,String>> getTransitionStates() {
+        LinkedList retval = new LinkedList<Map.Entry<Character,String>>();
+        for(Map.Entry<Character, String> entry : transitionStates.entrySet()){
+            retval.add(entry);
+        }
+
+        return retval;
     }
 
 
