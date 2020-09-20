@@ -66,9 +66,8 @@ public class DFADriver {
 			while(scan.hasNext()){
 					String input = scan.nextLine();
 					boolean accepts = dfa.accepts(input);
-					System.out.println("Original: " + (accepts?"yes":"no"));
+					System.out.println(accepts?"yes":"no");
                     boolean acceptsC = dfaC.accepts(input);
-                    System.out.println("Complement: " + (acceptsC?"yes":"no"));
 					if(accepts == acceptsC) {
 						correctC = false;
 					}

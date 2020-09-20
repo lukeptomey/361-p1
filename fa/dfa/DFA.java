@@ -18,13 +18,11 @@ import fa.State;
  */
 
 
-
 public class DFA implements DFAInterface {
 
     private LinkedHashSet<DFAState> Q;
     private HashSet<Character> alphabet;
     private LinkedHashSet<String> origTrans;
-    //private DFAState currentState;
 
 
     /**
@@ -34,7 +32,6 @@ public class DFA implements DFAInterface {
         Q = new LinkedHashSet<DFAState>();
         alphabet = new HashSet<Character>();
         origTrans = new LinkedHashSet<String>();
-        //currentState = new DFAState();
     }
 
 
@@ -50,7 +47,6 @@ public class DFA implements DFAInterface {
                 state = it.next();
                 if(state.getName().equals(name)) {
                     state.setStartState(true);
-                    //currentState = state;
                 }
             }
         }
@@ -73,7 +69,7 @@ public class DFA implements DFAInterface {
     @Override
     public void addTransition(String fromState, char onSymb, String toState) {
 
-        // Add to alphabet if new symbol.
+        // Add to alphabet if new symbol. Add transition to list.
         alphabet.add(onSymb);
         origTrans.add(fromState + onSymb + toState);
 
@@ -145,17 +141,11 @@ public class DFA implements DFAInterface {
         DFA complementDFA = new DFA();
         complementDFA.createCompClone(Q, origTrans);
 
-        // ***** DEBUG *****
-        System.out.println(complementDFA.toString());
-
-
         return complementDFA;
     }
 
     @Override
     public boolean accepts(String s) {
-
-        //find the start state in q
 
         State start = getStartState();
         DFAState current = new DFAState("");
@@ -169,18 +159,15 @@ public class DFA implements DFAInterface {
         }
 
         //compare with transition map entries
-
         for(int i = 0; i < s.length(); i++){
             char c = s.charAt(i);
 
             //empty string exception
-           // System.out.println(current.getEndState()+ " " +current.getName());
             if(Character.valueOf(c).equals('e') && current.getEndState()) {
-               
-            return true;
+                return true;
             }
             current = (DFAState)getToState(current, c);
-            if(current == null){
+            if(current == null){    // null if invalid transition
                 return false;
             }
         }
@@ -190,7 +177,6 @@ public class DFA implements DFAInterface {
         }
 
         return false;
-
 
     }
 
@@ -342,9 +328,6 @@ public class DFA implements DFAInterface {
             current.setEndState(!(current.getEndState()));
         }
 
-         
     }
-
-
     
 }
