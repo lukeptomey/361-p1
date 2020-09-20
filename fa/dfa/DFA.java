@@ -151,7 +151,26 @@ public class DFA implements DFAInterface {
 
     @Override
     public boolean accepts(String s) {
-        return false;
+
+       //find the start state in q
+
+      Iterator<DFAState> it = new Iterator<DFAState>;
+
+      DFAState start = getStartState();
+      LinkedList<Map.Entry<Character,String>> transitions =start.getTransitionStates();
+
+      Iterator<String> stringIt = s.iterator();
+    
+      for(int i = 0; i < s.length(); i++){
+          
+      }
+
+
+       }
+       
+       //compare with transition map entries
+
+
     }
 
     @Override
