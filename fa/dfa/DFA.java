@@ -23,6 +23,7 @@ public class DFA implements DFAInterface {
 
     private LinkedHashSet<DFAState> Q;
     private HashSet<Character> alphabet;
+    private LinkedHashSet<String> origTrans;
 
 
     /**
@@ -31,19 +32,22 @@ public class DFA implements DFAInterface {
     public DFA() {
         Q = new LinkedHashSet<DFAState>();
         alphabet = new HashSet<Character>();
+        origTrans = new LinkedHashSet<String>();
     }
 
 
     @Override
     public void addStartState(String name) {
         DFAState state = new DFAState(name);
-        state.setStartState();
+        state.setStartState(true);
+
+        // Goes into if state already exists in Q.
         if(!(Q.add(state))){
             Iterator<DFAState> it = Q.iterator();
             while(it.hasNext()) {
                 state = it.next();
                 if(state.getName().equals(name)) {
-                    state.setStartState();
+                    state.setStartState(true);
                 }
             }
         }
@@ -58,7 +62,7 @@ public class DFA implements DFAInterface {
     @Override
     public void addFinalState(String name) {
         DFAState state = new DFAState(name);
-        state.setEndState();
+        state.setEndState(true);
         Q.add(state);
 
     }
@@ -68,6 +72,7 @@ public class DFA implements DFAInterface {
 
         // Add to alphabet if new symbol.
         alphabet.add(onSymb);
+        origTrans.add(fromState + onSymb + toState);
 
         Iterator<DFAState> it = Q.iterator();
 
@@ -91,8 +96,6 @@ public class DFA implements DFAInterface {
             DFASTATE insert =it.next();
             states.insert(temp);
         }
-        return states;
-    }
 
     @Override
     public Set<? extends State> getFinalStates() {
@@ -113,19 +116,22 @@ public class DFA implements DFAInterface {
 
     @Override
     public DFA complement() {
-        // TODO Auto-generated method stub
-        return null;
+        DFA complementDFA = new DFA();
+        complementDFA.createCompClone(Q, origTrans);
+
+        System.out.println(complementDFA.toString());
+
+
+        return complementDFA;
     }
 
     @Override
     public boolean accepts(String s) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public State getToState(DFAState from, char onSymb) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -218,6 +224,48 @@ public class DFA implements DFAInterface {
 
 
         return finalOutput.toString();
+    }
+
+    /*
+     * Called by DFA. Sets up a new DFA clone of its self and applies complement to 
+     * start and final states.
+     * @param cQ Original Q
+     * @param newT original transition values
+     */
+    private void createCompClone(LinkedHashSet<DFAState> cQ, LinkedHashSet<String> newT) {
+
+        // Create copy of states in Q
+        Iterator<DFAState> it3 = cQ.iterator();
+        while(it3.hasNext()) {
+            DFAState current = it3.next();
+            if(current.getEndState()){
+                addFinalState(current.getName());
+            } else
+            if(current.getStartState()) {
+                addStartState(current.getName());
+            } else
+            addState(current.getName());
+        }
+
+        // Add transition copy
+        Iterator<String> it2 = newT.iterator();
+        while(it2.hasNext()) {
+            String current = it2.next();
+            addTransition(((Character)current.charAt(0)).toString(), current.charAt(1), ((Character)current.charAt(2)).toString());
+        }
+
+        // Swap start and final states of complement
+        Set cFinalStates = getFinalStates();
+        DFAState cStartState = (DFAState)getStartState();
+        Iterator<DFAState> it = cFinalStates.iterator();
+        while(it.hasNext()) {
+            DFAState current = it.next();
+            current.setStartState(true);
+            current.setEndState(false);
+        }
+
+        cStartState.setStartState(false);
+        cStartState.setEndState(true);
     }
 
 
