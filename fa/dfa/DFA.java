@@ -182,7 +182,6 @@ public class DFA implements DFAInterface {
             
             // Creates 2D delta array
             LinkedList<Map.Entry<Character, String>> transitions = current.getTransitionStates();
-           // System.out.println(transitions);
             for (Map.Entry<Character, String> transition : transitions) {
                 while(!(a.get(0).get(col).equals(transition.getKey().toString()))) {
                     col +=1;
@@ -194,7 +193,6 @@ public class DFA implements DFAInterface {
         }
 
         // Creates delta output with 2D array
-        System.out.println(a);
         for(int i = 1; i < row; i++) {
             deltaOutput.append("\n\t");
             for(int m = 0; m < count; m++) {

@@ -83,15 +83,10 @@ public class DFAState extends State {
      * @return LinkedList of Map Entries of node transitions.
      */
     public LinkedList<Map.Entry<Character,String>> getTransitionStates() {
-        System.out.println("***Iterating through Transition States***");
-        System.out.println("Name: " + this.name);
         LinkedList retval = new LinkedList<Map.Entry<Character,String>>();
         for(Map.Entry<Character, String> entry : transitionStates.entrySet()){
-            System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
             retval.add(entry);
         }
-
-        System.out.println("***Done***");
 
         return retval;
     }
