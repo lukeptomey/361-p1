@@ -94,15 +94,25 @@ public class DFA implements DFAInterface {
 
         while(it.hasNext()){
             DFASTATE insert =it.next();
-            states.insert(temp);
+            states.insert(insert);
         }
         return states;
     }
 
     @Override
     public Set<? extends State> getFinalStates() {
-        // TODO Auto-generated method stub
-        return null;
+        Set finalStates = new Set
+
+        Iterator<DFAState> it = Q.iterator();
+
+        while(it.hasNext()){
+            DFAState temp = it.next();
+
+            if(temp.getEndState == true){
+                finalStates.insert(temp)
+            }
+        }
+        return finalStates;
     }
 
     @Override
